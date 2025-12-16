@@ -70,6 +70,10 @@ export async function getProduct(handle: string) {
             }
           }
         }
+        metafield(namespace: "custom", key: "reviews") {
+          value
+          type
+        }
       }
     }
   `;

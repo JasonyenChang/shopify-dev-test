@@ -23,6 +23,10 @@ export interface ShopifyProduct {
       };
     }>;
   };
+  metafield: {
+    value: string;
+    type: string;
+  } | null;
 }
 
 export interface ShopifyProductResponse {
@@ -32,4 +36,16 @@ export interface ShopifyProductResponse {
   errors?: Array<{
     message: string;
   }>;
+}
+
+export interface Review {
+  id: string;
+  productId: string;
+  rating: 1 | 2 | 3 | 4 | 5;
+  text: string;
+  userName: string;
+  userId?: string;
+  helpfulCount: number;
+  createdAt: string;
+  verified?: boolean;
 }

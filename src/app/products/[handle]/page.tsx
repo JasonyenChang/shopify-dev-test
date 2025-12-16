@@ -12,11 +12,12 @@ interface ProductPageProps {
 export default async function ProductPage({ params }: ProductPageProps) {
   const { handle } = await params;
   const product = await getProduct(handle);
-  console.log("ProductPage", product)
 
   if (!product) {
     notFound();
   }
+
+  console.log("# product.metafield #", product, JSON.parse(product.metafield?.value));
 
   const firstImage = product.images.edges[0]?.node;
   const { minVariantPrice, maxVariantPrice } = product.priceRange;

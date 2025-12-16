@@ -26,7 +26,7 @@ export default function Home() {
 
           <div className="mt-6">
             <Link
-              href="/products/example-product"
+              href="/products/organic-cotton-t-shirt"
               className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
             >
               View Example Product Page
