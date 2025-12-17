@@ -110,7 +110,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <div>
               <div className="flex items-baseline gap-3">
                 <h2 className="text-2xl font-bold">Customer Reviews</h2>
-                <span className="text-gray-500 text-sm">({reviewCount})</span>
               </div>
 
               {reviewCount > 0 && (

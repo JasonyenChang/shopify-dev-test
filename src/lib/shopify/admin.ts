@@ -40,7 +40,7 @@ export async function shopifyAdminFetch<T>(
     return json;
 }
 
-// 透過 Product ID 直接從 Admin API 讀取 Metafield
+// Fetch product reviews
 export async function getProductReviews(productId: string): Promise<Review[]> {
     const query = `
     query GetProductReviews($id: ID!) {
@@ -77,29 +77,7 @@ export async function addProductReview(productId: string, reviewData: CreateRevi
         createdAt: new Date().toISOString(),
     };
 
-    // Read existing reviews from Metafield
-    const readQuery = `
-    query GetProductMetafield($id: ID!) {
-      product(id: $id) {
-        metafield(namespace: "custom", key: "reviews") {
-          value
-        }
-      }
-    }
-  `;
-
-    interface ReadResponse {
-        data: {
-            product: {
-                metafield: { value: string } | null;
-            };
-        };
-    }
-
-    const readData = await shopifyAdminFetch<ReadResponse>(readQuery, { id: productId });
-
-    const existingValue = readData.data.product.metafield?.value;
-    const currentReviews: Review[] = existingValue ? JSON.parse(existingValue) : [];
+    const currentReviews = await getProductReviews(productId);
 
     // Merge reviews
     const updatedReviews = [newReview, ...currentReviews];

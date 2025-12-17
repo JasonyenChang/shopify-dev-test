@@ -82,7 +82,7 @@ export default function ReviewsSection({ productId, initialReviews }: ReviewsSec
         <div>
             <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
                 <div>
-                    <h2 className="text-2xl font-bold">Customer Reviews ({optimisticReviews.length})</h2>
+                    <h2 className="text-2xl font-bold">Reviews ({optimisticReviews.length})</h2>
                 </div>
 
                 <button
