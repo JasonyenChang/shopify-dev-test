@@ -11,6 +11,14 @@ interface ProductPageProps {
   }>;
 }
 
+function formatDate(dateString: string) {
+  return new Date(dateString).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
 export default async function ProductPage({ params }: ProductPageProps) {
   const { handle } = await params;
   const product = await getProduct(handle);
@@ -147,7 +155,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     <span className="text-yellow-500">{"★".repeat(review.rating)}</span>
                   </div>
                   <p className="text-gray-700">{review.text}</p>
-                  <p className="text-xs text-gray-500">{new Date(review.createdAt).toLocaleDateString()}</p>
+                  <p className="text-xs text-gray-500">{formatDate(review.createdAt)}</p>
+                  <div className="mt-4 flex items-center gap-4 text-sm text-gray-500">
+                    <div className="flex items-center gap-1">
+                      <span className="text-gray-400">Was this helpful?</span>
+                      <span className="flex items-center gap-1 font-medium text-gray-700">
+                        👍 {review.helpfulCount || 0}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -155,26 +171,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <p className="text-gray-500 italic">No reviews yet. Be the first to review!</p>
           )}
 
-          {/* <div className="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center">
-            <div className="max-w-md mx-auto">
-              <div className="text-6xl mb-4">📝</div>
-              <h3 className="text-xl font-semibold mb-2">
-                Review Feature Goes Here
-              </h3>
-              <p className="text-gray-600 mb-4">
-                {`This is where you'll implement the product review feature.`}
-              </p>
-              <div className="text-left bg-gray-50 rounded-lg p-4 text-sm">
-                <p className="font-semibold mb-2">TODO: Implement</p>
-                <ul className="list-disc list-inside space-y-1 text-gray-700">
-                  <li>Review submission form</li>
-                  <li>Review list display</li>
-                  <li>Star ratings</li>
-                  <li>Sort</li>
-                </ul>
-              </div>
-            </div>
-          </div> */}
         </div>
       </div>
     </div>

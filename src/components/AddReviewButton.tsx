@@ -16,9 +16,9 @@ export default function AddReviewButton({ productId }: AddReviewButtonProps) {
             try {
                 const fakeReview = {
                     rating: 2,
-                    text: "Not good.",
-                    userName: "Lucy",
-                    userId: "5",
+                    text: "Not so good.",
+                    userName: "Ben",
+                    // userId: "5",
                 };
 
                 const res = await fetch("/api/reviews", {

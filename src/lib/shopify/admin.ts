@@ -45,6 +45,7 @@ export type CreateReviewInput = Omit<Review, "id" | "createdAt" | "helpfulCount"
 export async function addProductReview(productId: string, reviewData: CreateReviewInput): Promise<Review> {
     const newReview: Review = {
         id: crypto.randomUUID(),
+        productId,
         rating: reviewData.rating,
         text: reviewData.text,
         userName: reviewData.userName,
