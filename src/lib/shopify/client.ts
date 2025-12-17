@@ -24,9 +24,10 @@ export async function shopifyFetch<T>(
       query,
       variables,
     }),
-    next: {
-      revalidate: 60, // Cache for 60 seconds
-    },
+    cache: "no-store",
+    // next: {
+    //   revalidate: 60, // Cache for 60 seconds
+    // },
   });
 
   if (!response.ok) {

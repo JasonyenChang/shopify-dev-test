@@ -40,6 +40,30 @@ export async function shopifyAdminFetch<T>(
     return json;
 }
 
+// 透過 Product ID 直接從 Admin API 讀取 Metafield
+export async function getProductReviews(productId: string): Promise<Review[]> {
+    const query = `
+    query GetProductReviews($id: ID!) {
+      product(id: $id) {
+        metafield(namespace: "custom", key: "reviews") {
+          value
+        }
+      }
+    }
+  `;
+
+    const response = await shopifyAdminFetch<{
+        data: {
+            product: {
+                metafield: { value: string } | null;
+            };
+        };
+    }>(query, { id: productId });
+
+    const value = response.data.product.metafield?.value;
+    return value ? JSON.parse(value) : [];
+}
+
 export type CreateReviewInput = Omit<Review, "id" | "createdAt" | "helpfulCount" | "verified">;
 
 export async function addProductReview(productId: string, reviewData: CreateReviewInput): Promise<Review> {

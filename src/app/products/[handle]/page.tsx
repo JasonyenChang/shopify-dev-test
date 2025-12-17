@@ -3,20 +3,12 @@ import Image from "next/image";
 import { getProduct } from "@/lib/shopify/client";
 import { formatPrice } from "@/lib/utils";
 import { Review } from "@/types/shopify";
-import AddReviewButton from "@/components/AddReviewButton";
-
+import ReviewsSection from "@/components/ReviewsSection";
+import { getProductReviews } from "@/lib/shopify/admin";
 interface ProductPageProps {
   params: Promise<{
     handle: string;
   }>;
-}
-
-function formatDate(dateString: string) {
-  return new Date(dateString).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
@@ -27,8 +19,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
     notFound();
   }
 
-  const reviews: Review[] = product.metafield?.value ? JSON.parse(product.metafield?.value) : [];
-  console.log("# product and reviews #", product, reviews)
+  const reviews: Review[] = await getProductReviews(product.id);
+  console.log("# product and reviews #", new Date(), product, reviews)
 
   const reviewCount = reviews.length;
   const averageRating = reviewCount > 0
@@ -137,14 +129,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
               )}
             </div>
 
-            <AddReviewButton productId={product.id} />
+            {/* <AddReviewButton productId={product.id} /> */}
           </div>
         </div>
 
         <hr className="border-gray-100 mb-8" />
 
         {/* Reviews Section - TO BE IMPLEMENTED */}
-        <div className="bg-white rounded-lg shadow-md p-8">
+        <ReviewsSection
+          productId={product.id}
+          initialReviews={reviews}
+        />
+        {/* <div className="bg-white rounded-lg shadow-md p-8">
           <h2 className="text-2xl font-bold mb-6">Reviews</h2>
           {reviews.length > 0 ? (
             <div className="space-y-4">
@@ -171,7 +167,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <p className="text-gray-500 italic">No reviews yet. Be the first to review!</p>
           )}
 
-        </div>
+        </div> */}
       </div>
     </div>
   );
