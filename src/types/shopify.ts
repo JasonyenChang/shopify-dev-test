@@ -40,7 +40,6 @@ export interface ShopifyProductResponse {
 
 export interface Review {
   id: string;
-  productId: string;
   rating: 1 | 2 | 3 | 4 | 5;
   text: string;
   userName: string;

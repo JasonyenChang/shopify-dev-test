@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { getProduct } from "@/lib/shopify/client";
 import { formatPrice } from "@/lib/utils";
+import { Review } from "@/types/shopify";
+import AddReviewButton from "@/components/AddReviewButton";
 
 interface ProductPageProps {
   params: Promise<{
@@ -17,7 +19,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
     notFound();
   }
 
-  console.log("# product.metafield #", product, JSON.parse(product.metafield?.value));
+  const reviews: Review[] = product.metafield?.value ? JSON.parse(product.metafield?.value) : [];
+  console.log("# product and reviews #", product, reviews)
+
+  const reviewCount = reviews.length;
+  const averageRating = reviewCount > 0
+    ? (reviews.reduce((sum, review) => sum + review.rating, 0) / reviewCount).toFixed(1)
+    : "0.0";
 
   const firstImage = product.images.edges[0]?.node;
   const { minVariantPrice, maxVariantPrice } = product.priceRange;
@@ -95,11 +103,59 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </div>
         </div>
 
+
+        {/* Reviews Section */}
+        <div className="bg-white rounded-lg shadow-md p-8">
+          <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+            <div>
+              <div className="flex items-baseline gap-3">
+                <h2 className="text-2xl font-bold">Customer Reviews</h2>
+                <span className="text-gray-500 text-sm">({reviewCount})</span>
+              </div>
+
+              {reviewCount > 0 && (
+                <div className="flex items-center gap-2 mt-1">
+                  <span className="text-3xl font-bold text-gray-900">{averageRating}</span>
+                  <div className="flex flex-col">
+                    <div className="flex text-yellow-400 text-lg">
+                      {"★".repeat(Math.round(Number(averageRating)))}
+                      <span className="text-gray-300">
+                        {"★".repeat(5 - Math.round(Number(averageRating)))}
+                      </span>
+                    </div>
+                    <span className="text-xs text-gray-500">Based on {reviewCount} reviews</span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <AddReviewButton productId={product.id} />
+          </div>
+        </div>
+
+        <hr className="border-gray-100 mb-8" />
+
         {/* Reviews Section - TO BE IMPLEMENTED */}
         <div className="bg-white rounded-lg shadow-md p-8">
-          <h2 className="text-2xl font-bold mb-6">Customer Reviews</h2>
+          <h2 className="text-2xl font-bold mb-6">Reviews</h2>
+          {reviews.length > 0 ? (
+            <div className="space-y-4">
+              {reviews.map((review) => (
+                <div key={review.id} className="border-b pb-4">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="font-bold">{review.userName}</span>
+                    <span className="text-yellow-500">{"★".repeat(review.rating)}</span>
+                  </div>
+                  <p className="text-gray-700">{review.text}</p>
+                  <p className="text-xs text-gray-500">{new Date(review.createdAt).toLocaleDateString()}</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-500 italic">No reviews yet. Be the first to review!</p>
+          )}
 
-          <div className="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center">
+          {/* <div className="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center">
             <div className="max-w-md mx-auto">
               <div className="text-6xl mb-4">📝</div>
               <h3 className="text-xl font-semibold mb-2">
@@ -118,7 +174,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </ul>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
