@@ -34,11 +34,12 @@ export async function PATCH(request: Request) {
         }
 
         // Check action type
-        if (action === "helpfulCount") {
-            await incrementHelpfulCount(productId, reviewId);
-        } else {
-            // Optional: Handle invalid actions or return 400
-            // For now, we just ignore unknown actions or handle them as needed
+        switch (action) {
+            case "helpfulCount":
+                await incrementHelpfulCount(productId, reviewId);
+                break;
+            default:
+                break;
         }
 
         return NextResponse.json({ success: true });

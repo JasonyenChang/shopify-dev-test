@@ -40,6 +40,14 @@ export async function shopifyAdminFetch<T>(
     return json;
 }
 
+interface ProductReviewsResponse {
+    data: {
+        product: {
+            metafield: { value: string } | null;
+        };
+    };
+}
+
 // Fetch product reviews
 export async function getProductReviews(productId: string): Promise<Review[]> {
     const query = `
@@ -52,13 +60,9 @@ export async function getProductReviews(productId: string): Promise<Review[]> {
     }
   `;
 
-    const response = await shopifyAdminFetch<{
-        data: {
-            product: {
-                metafield: { value: string } | null;
-            };
-        };
-    }>(query, { id: productId });
+    const response = await shopifyAdminFetch<ProductReviewsResponse>(query, {
+        id: productId
+    });
 
     const value = response.data.product.metafield?.value;
     return value ? JSON.parse(value) : [];
