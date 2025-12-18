@@ -20,12 +20,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   const reviews: Review[] = await getProductReviews(product.id);
-  console.log("# product and reviews #", new Date(), product, reviews)
-
-  const reviewCount = reviews.length;
-  const averageRating = reviewCount > 0
-    ? (reviews.reduce((sum, review) => sum + review.rating, 0) / reviewCount).toFixed(1)
-    : "0.0";
 
   const firstImage = product.images.edges[0]?.node;
   const { minVariantPrice, maxVariantPrice } = product.priceRange;
@@ -103,70 +97,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </div>
         </div>
 
-
-        {/* Reviews Section */}
-        <div className="bg-white rounded-lg shadow-md p-8">
-          <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-            <div>
-              <div className="flex items-baseline gap-3">
-                <h2 className="text-2xl font-bold">Customer Reviews</h2>
-              </div>
-
-              {reviewCount > 0 && (
-                <div className="flex items-center gap-2 mt-1">
-                  <span className="text-3xl font-bold text-gray-900">{averageRating}</span>
-                  <div className="flex flex-col">
-                    <div className="flex text-yellow-400 text-lg">
-                      {"★".repeat(Math.round(Number(averageRating)))}
-                      <span className="text-gray-300">
-                        {"★".repeat(5 - Math.round(Number(averageRating)))}
-                      </span>
-                    </div>
-                    <span className="text-xs text-gray-500">Based on {reviewCount} reviews</span>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* <AddReviewButton productId={product.id} /> */}
-          </div>
-        </div>
-
         <hr className="border-gray-100 mb-8" />
 
-        {/* Reviews Section - TO BE IMPLEMENTED */}
+        {/* Reviews Section */}
         <ReviewsSection
           productId={product.id}
           initialReviews={reviews}
         />
-        {/* <div className="bg-white rounded-lg shadow-md p-8">
-          <h2 className="text-2xl font-bold mb-6">Reviews</h2>
-          {reviews.length > 0 ? (
-            <div className="space-y-4">
-              {reviews.map((review) => (
-                <div key={review.id} className="border-b pb-4">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="font-bold">{review.userName}</span>
-                    <span className="text-yellow-500">{"★".repeat(review.rating)}</span>
-                  </div>
-                  <p className="text-gray-700">{review.text}</p>
-                  <p className="text-xs text-gray-500">{formatDate(review.createdAt)}</p>
-                  <div className="mt-4 flex items-center gap-4 text-sm text-gray-500">
-                    <div className="flex items-center gap-1">
-                      <span className="text-gray-400">Was this helpful?</span>
-                      <span className="flex items-center gap-1 font-medium text-gray-700">
-                        👍 {review.helpfulCount || 0}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-gray-500 italic">No reviews yet. Be the first to review!</p>
-          )}
-
-        </div> */}
       </div>
     </div>
   );
