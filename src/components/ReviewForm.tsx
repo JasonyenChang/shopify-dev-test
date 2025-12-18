@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import useCurrentUser from "@/lib/hook/useCurrentUser";
 
 export interface ReviewFormData {
     name: string;
@@ -21,22 +22,7 @@ export default function ReviewForm({ onSubmit, isSubmitting }: ReviewFormProps) 
     const [hoverRating, setHoverRating] = useState(0);
 
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
-    const [user, setUser] = useState<{ id: string; name: string } | null>(null);
-
-    useEffect(() => {
-        if (typeof window !== "undefined") {
-            const userStr = localStorage.getItem("user");
-            if (userStr) {
-                try {
-                    const userData = JSON.parse(userStr);
-                    setUser(userData);
-                    setName(userData.name);
-                } catch (e) {
-                    console.error("Auth error", e);
-                }
-            }
-        }
-    }, []);
+    const user = useCurrentUser();
 
     const validate = () => {
         const newErrors: { [key: string]: string } = {};
