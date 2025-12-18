@@ -107,6 +107,7 @@ export default function ReviewForm({ onSubmit, isSubmitting }: ReviewFormProps) 
                     rows={4}
                     className={`w-full p-2 border rounded-md ${errors.text ? "border-red-500" : "border-gray-300"}`}
                     placeholder="Share your thoughts..."
+                    maxLength={1000}
                 />
                 {errors.text && <p className="text-red-500 text-xs mt-1">{errors.text}</p>}
             </div>
