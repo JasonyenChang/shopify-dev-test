@@ -61,12 +61,7 @@ export default function ReviewsSection({ productId, initialReviews }: ReviewsSec
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                         productId,
-                        review: {
-                            rating: optimisticReview.rating,
-                            text: optimisticReview.text,
-                            userName: optimisticReview.userName,
-                            userId: optimisticReview.userId,
-                        },
+                        review: optimisticReview,
                     }),
                 });
 

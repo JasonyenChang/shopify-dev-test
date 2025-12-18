@@ -64,24 +64,11 @@ export async function getProductReviews(productId: string): Promise<Review[]> {
     return value ? JSON.parse(value) : [];
 }
 
-export type CreateReviewInput = Omit<Review, "id" | "createdAt" | "helpfulCount">;
-
-export async function addProductReview(productId: string, reviewData: CreateReviewInput): Promise<Review> {
-    const newReview: Review = {
-        id: crypto.randomUUID(),
-        productId,
-        rating: reviewData.rating,
-        text: reviewData.text,
-        userId: reviewData.userId,
-        userName: reviewData.userName,
-        helpfulCount: 0,
-        createdAt: new Date().toISOString(),
-    };
-
+export async function addProductReview(productId: string, reviewData: Review): Promise<Review> {
     const currentReviews = await getProductReviews(productId);
 
     // Merge reviews
-    const updatedReviews = [newReview, ...currentReviews];
+    const updatedReviews = [reviewData, ...currentReviews];
 
     const writeMutation = `
     mutation SetProductReviews($metafields: [MetafieldsSetInput!]!) {
@@ -112,5 +99,5 @@ export async function addProductReview(productId: string, reviewData: CreateRevi
 
     await shopifyAdminFetch(writeMutation, variables);
 
-    return newReview;
+    return reviewData;
 }

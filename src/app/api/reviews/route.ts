@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { addProductReview, CreateReviewInput } from "@/lib/shopify/admin";
+import { addProductReview } from "@/lib/shopify/admin";
 
 export async function POST(request: Request) {
     try {
@@ -10,7 +10,7 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: "Missing fields" }, { status: 400 });
         }
 
-        const newReview = await addProductReview(productId, review as CreateReviewInput);
+        const newReview = await addProductReview(productId, review);
 
         return NextResponse.json({ success: true, review: newReview });
     } catch (error) {
