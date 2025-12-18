@@ -4,6 +4,7 @@ import { useOptimistic, useTransition, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Review } from "@/types/shopify";
 import ReviewForm, { ReviewFormData } from "./ReviewForm";
+import toast, { Toaster } from "react-hot-toast";
 
 interface ReviewsSectionProps {
     productId: string;
@@ -72,17 +73,28 @@ export default function ReviewsSection({ productId, initialReviews }: ReviewsSec
 
                 //  Inform page.tsx to request api again
                 router.refresh();
-
                 setShowForm(false);
+                toast.success("Review submitted successfully!", {
+                    duration: 3000,
+                    position: "top-center",
+                    style: {
+                        background: "#333",
+                        color: "#fff",
+                    },
+                });
             } catch (error) {
                 console.error("Submission failed", error);
-                alert("Submission failed. Please try again.");
+                toast.error("Failed to submit. Please try again.", {
+                    duration: 3000,
+                    position: "top-center",
+                });
             }
         });
     };
 
     return (
         <div>
+            <Toaster />
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
                 <div>

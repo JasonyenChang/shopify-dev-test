@@ -1,6 +1,9 @@
 "use client";
 import { useState, useEffect, startTransition } from "react";
 
+/*
+Fetch user info from the localstorage
+*/
 export default function useCurrentUser() {
     const [user, setUser] = useState<{ id: string; name: string } | null>(null);
 

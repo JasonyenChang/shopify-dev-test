@@ -70,6 +70,7 @@ export default function ReviewForm({ onSubmit, isSubmitting }: ReviewFormProps) 
                         onChange={(e) => setName(e.target.value)}
                         className={`w-full p-2 border rounded-md ${errors.name ? "border-red-500" : "border-gray-300"}`}
                         placeholder="Your Name"
+                        disabled={isSubmitting}
                     />
                 )}
                 {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
@@ -86,6 +87,7 @@ export default function ReviewForm({ onSubmit, isSubmitting }: ReviewFormProps) 
                             className="text-2xl focus:outline-none transition-transform hover:scale-110"
                             onClick={() => setRating(star)}
                             onMouseEnter={() => setHoverRating(star)}
+                            disabled={isSubmitting}
                         >
                             <span className={star <= (hoverRating || rating) ? "text-yellow-400" : "text-gray-300"}>
                                 ★
@@ -108,6 +110,7 @@ export default function ReviewForm({ onSubmit, isSubmitting }: ReviewFormProps) 
                     className={`w-full p-2 border rounded-md ${errors.text ? "border-red-500" : "border-gray-300"}`}
                     placeholder="Share your thoughts..."
                     maxLength={1000}
+                    disabled={isSubmitting}
                 />
                 {errors.text && <p className="text-red-500 text-xs mt-1">{errors.text}</p>}
             </div>
