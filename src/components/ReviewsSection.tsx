@@ -19,6 +19,7 @@ function formatDate(dateString: string) {
             day: "numeric",
         });
     } catch (e) {
+        console.log("unknown formatDate", e)
         return "Just now";
     }
 }

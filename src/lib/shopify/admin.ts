@@ -64,7 +64,7 @@ export async function getProductReviews(productId: string): Promise<Review[]> {
     return value ? JSON.parse(value) : [];
 }
 
-export type CreateReviewInput = Omit<Review, "id" | "createdAt" | "helpfulCount" | "verified">;
+export type CreateReviewInput = Omit<Review, "id" | "createdAt" | "helpfulCount">;
 
 export async function addProductReview(productId: string, reviewData: CreateReviewInput): Promise<Review> {
     const newReview: Review = {
@@ -76,7 +76,6 @@ export async function addProductReview(productId: string, reviewData: CreateRevi
         userName: reviewData.userName,
         helpfulCount: 0,
         createdAt: new Date().toISOString(),
-        // verified: reviewData.userId !== undefined
     };
 
     const currentReviews = await getProductReviews(productId);
