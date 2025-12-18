@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Review } from "@/types/shopify";
 import ReviewForm, { ReviewFormData } from "./ReviewForm";
 import toast, { Toaster } from "react-hot-toast";
+import HelpfulButton from "./HelpfulButton";
 
 interface ReviewsSectionProps {
     productId: string;
@@ -156,15 +157,11 @@ export default function ReviewsSection({ productId, initialReviews }: ReviewsSec
                             <div className="mt-4 flex items-center gap-4 text-sm text-gray-500">
                                 <div className="flex items-center gap-2">
                                     <span className="text-gray-400">Was this helpful?</span>
-                                    {/* <HelpfulButton
+                                    <HelpfulButton
                                         productId={productId}
                                         reviewId={review.id}
                                         initialCount={review.helpfulCount || 0}
-                                    /> */}
-                                    {/* Mock data */}
-                                    <span className="flex items-center gap-1 font-medium text-gray-700">
-                                        👍 {review.helpfulCount || 0}
-                                    </span>
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -173,7 +170,6 @@ export default function ReviewsSection({ productId, initialReviews }: ReviewsSec
             ) : (
                 // Empty State
                 <div className="text-center py-12 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
-                    <div className="text-4xl mb-3">📝</div>
                     <p className="text-gray-900 font-medium">No reviews yet</p>
                     <p className="text-gray-500 text-sm">Be the first to share your thoughts!</p>
                 </div>

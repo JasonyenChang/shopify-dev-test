@@ -64,6 +64,50 @@ export async function getProductReviews(productId: string): Promise<Review[]> {
     return value ? JSON.parse(value) : [];
 }
 
+export async function incrementHelpfulCount(productId: string, reviewId: string): Promise<void> {
+    // Fetch existing reviews
+    const currentReviews = await getProductReviews(productId);
+
+    if (currentReviews.length === 0) return;
+
+    // Find the specific review and increment the count
+    const updatedReviews = currentReviews.map((review) => {
+        if (review.id === reviewId) {
+            return {
+                ...review,
+                helpfulCount: (review.helpfulCount || 0) + 1,
+            };
+        }
+        return review;
+    });
+
+    // Save the updated JSON blob back to Shopify
+    const writeMutation = `
+    mutation SetProductReviews($metafields: [MetafieldsSetInput!]!) {
+      metafieldsSet(metafields: $metafields) {
+        userErrors {
+          field
+          message
+        }
+      }
+    }
+  `;
+
+    const variables = {
+        metafields: [
+            {
+                ownerId: productId,
+                namespace: "custom",
+                key: "reviews",
+                type: "json",
+                value: JSON.stringify(updatedReviews),
+            },
+        ],
+    };
+
+    await shopifyAdminFetch(writeMutation, variables);
+}
+
 export async function addProductReview(productId: string, reviewData: Review): Promise<Review> {
     const currentReviews = await getProductReviews(productId);
 
