@@ -17,6 +17,27 @@ Run the app.
 npm run dev
 ```
 
+Create at least 2 products with these details:
+
+   **Product 1: Organic Cotton T-Shirt**
+
+   - Title: Organic Cotton T-Shirt
+   - Description: Soft, breathable organic cotton t-shirt
+   - Price: $29.99
+   - Product type: Apparel
+   - Tags: organic, sustainable, casual
+   - Add an image (use placeholder if needed)
+   - Handle will be: `organic-cotton-t-shirt`
+
+   **Product 2: Stainless Steel Water Bottle**
+
+   - Title: Stainless Steel Water Bottle
+   - Description: Insulated water bottle keeps drinks cold for 24 hours
+   - Price: $24.99
+   - Product type: Accessories
+   - Tags: eco-friendly, travel, hydration
+   - Handle will be: `stainless-steel-water-bottle`
+
 And open http://localhost:3000 in your browser, then you can start testing!
 
 ## Storage solution chosen and why
