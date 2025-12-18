@@ -34,8 +34,53 @@ export default async function ProductPage({ params }: ProductPageProps) {
         maxVariantPrice.currencyCode
       )}`;
 
+  // For Google SEO
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": product.title,
+    "description": product.description,
+    "image": product.images,
+    "sku": product.title || product.id,
+    "brand": {
+      "@type": "Brand",
+      "name": "Jason Dev Store",
+    },
+    "offers": {
+      "@type": "Offer",
+      "priceCurrency": product.priceRange.minVariantPrice.currencyCode,
+      "price": product.priceRange.minVariantPrice.amount,
+    },
+    ...(reviews.length > 0 && {
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "reviewCount": reviews.length,
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "review": reviews.map((review) => ({
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": review.rating,
+          "bestRating": "5",
+        },
+        "author": {
+          "@type": "Person",
+          "name": review.userName,
+        },
+        "datePublished": review.createdAt,
+        "reviewBody": review.text,
+      })),
+    }),
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="max-w-6xl mx-auto">
         {/* Product Details */}
         <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
