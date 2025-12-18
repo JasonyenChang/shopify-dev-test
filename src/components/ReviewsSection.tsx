@@ -25,10 +25,13 @@ function formatDate(dateString: string) {
     }
 }
 
+const REVIEWS_PER_PAGE = 10;
+
 export default function ReviewsSection({ productId, initialReviews }: ReviewsSectionProps) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const [showForm, setShowForm] = useState(false);
+    const [visibleCount, setVisibleCount] = useState(REVIEWS_PER_PAGE);
 
     // For optimistic UI. Insert the latest review into the list and display it to the user immediately.
     const [optimisticReviews, addOptimisticReview] = useOptimistic(
@@ -94,6 +97,13 @@ export default function ReviewsSection({ productId, initialReviews }: ReviewsSec
         ? (optimisticReviews.reduce((sum, review) => sum + review.rating, 0) / reviewCount).toFixed(1)
         : "0.0";
 
+    const displayedReviews = optimisticReviews.slice(0, visibleCount);
+    const hasMore = visibleCount < optimisticReviews.length;
+
+    const handleLoadMore = () => {
+        setVisibleCount((prev) => prev + REVIEWS_PER_PAGE);
+    };
+
     return (
         <div>
             <Toaster />
@@ -140,9 +150,9 @@ export default function ReviewsSection({ productId, initialReviews }: ReviewsSec
                 <hr className="border-gray-100 mb-8" />
 
                 {/* Review list */}
-                {optimisticReviews.length > 0 ? (
+                {displayedReviews.length > 0 ? (
                     <div className="space-y-8">
-                        {optimisticReviews.map((review) => (
+                        {displayedReviews.map((review) => (
                             <div
                                 key={review.id}
                                 className={`border-b border-gray-100 pb-8 last:border-0 last:pb-0 ${review.id.length > 20 ? "opacity-70" : ""
@@ -186,6 +196,18 @@ export default function ReviewsSection({ productId, initialReviews }: ReviewsSec
                                 </div>
                             </div>
                         ))}
+
+                        {/* Load more */}
+                        {hasMore && (
+                            <div className="pt-4 text-center">
+                                <button
+                                    onClick={handleLoadMore}
+                                    className="px-6 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                                >
+                                    Load More Reviews
+                                </button>
+                            </div>
+                        )}
                     </div>
                 ) : (
                     // Empty State
