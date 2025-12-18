@@ -62,3 +62,5 @@ While this solution is efficient for a prototype or a small-to-medium store, I a
     * The Storefront API fetches the entire JSON blob. We cannot paginate server-side (e.g., "fetch only page 2"). Downloading 500+ reviews at once impacts initial page load performance.
 
 ## What you would improve with more time
+1. Allow users to edit/delete their own reviews.
+2. Support multiple languages. (Internationalization)
