@@ -102,13 +102,10 @@ export default function ReviewsSection({ productId, initialReviews }: ReviewsSec
         : "0.0";
 
     const sortedReviews = useMemo(() => {
-        // 複製一份陣列以免修改到原參考
         return [...optimisticReviews].sort((a, b) => {
             if (sortBy === 'recent') {
-                // 日期大到小 (新的在前面)
                 return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
             } else {
-                // Helpful 數大到小
                 return (b.helpfulCount || 0) - (a.helpfulCount || 0);
             }
         });
@@ -125,47 +122,63 @@ export default function ReviewsSection({ productId, initialReviews }: ReviewsSec
         <div>
             <Toaster />
             <div className="bg-white rounded-lg shadow-md p-8">
-                <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-                    <div>
-                        <div className="flex items-baseline gap-3">
-                            <h2 className="text-2xl font-bold">Customer Reviews</h2>
-                            <button
-                                onClick={() => setShowForm(!showForm)}
-                                className="text-blue-600 font-medium hover:underline transition-colors"
-                            >
-                                {showForm ? "Cancel" : "Write a Review"}
-                            </button>
-                        </div>
+                <div className="flex flex-col md:flex-row md:items-start justify-between mb-8 gap-6 border-b border-gray-100 pb-8">
+                    {/* Left Side: Title & Summary */}
+                    <div className="space-y-4">
+                        <h2 className="text-2xl font-bold text-gray-900">Customer Reviews</h2>
 
-                        <div className="flex justify-end items-center border-b border-gray-100 pb-4">
-                            <div className="flex items-center gap-2">
-                                <label htmlFor="sort-reviews" className="text-sm text-gray-600">Sort by:</label>
+                        {optimisticReviews.length > 0 && (
+                            <div className="flex items-center gap-4">
+                                <div className="flex items-baseline gap-2">
+                                    <span className="text-4xl font-bold text-gray-900">{averageRating}</span>
+                                    <div className="flex flex-col">
+                                        <div className="flex text-yellow-400 text-lg tracking-tight">
+                                            {"★".repeat(Math.round(Number(averageRating)))}
+                                            <span className="text-gray-200">
+                                                {"★".repeat(5 - Math.round(Number(averageRating)))}
+                                            </span>
+                                        </div>
+                                        <span className="text-sm text-gray-500 font-medium mt-0.5">
+                                            Based on {reviewCount} reviews
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Right Side: Actions */}
+                    <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto items-stretch sm:items-center">
+                        {/* Sort Dropdown */}
+                        {optimisticReviews.length > 0 && (
+                            <div className="relative group">
                                 <select
                                     id="sort-reviews"
                                     value={sortBy}
                                     onChange={(e) => setSortBy(e.target.value as SortOption)}
-                                    className="text-sm border-gray-300 border rounded-md py-1.5 px-3 focus:ring-2 focus:ring-black focus:border-transparent outline-none cursor-pointer hover:bg-gray-50"
+                                    className="bg-white border border-gray-300 text-sm rounded-md py-2 pl-3 pr-10 cursor-pointer focus:outline-none focus:border-black appearance-none"
                                 >
                                     <option value="recent">Most Recent</option>
                                     <option value="helpful">Most Helpful</option>
                                 </select>
-                            </div>
-                        </div>
-
-                        {optimisticReviews.length > 0 && (
-                            <div className="flex items-center gap-2 mt-1">
-                                <span className="text-3xl font-bold text-gray-900">{averageRating}</span>
-                                <div className="flex flex-col">
-                                    <div className="flex text-yellow-400 text-lg">
-                                        {"★".repeat(Math.round(Number(averageRating)))}
-                                        <span className="text-gray-300">
-                                            {"★".repeat(5 - Math.round(Number(averageRating)))}
-                                        </span>
-                                    </div>
-                                    <span className="text-xs text-gray-500">Based on {reviewCount} reviews</span>
+                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400 group-hover:text-gray-600 transition-colors">
+                                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                    </svg>
                                 </div>
                             </div>
                         )}
+
+                        {/* Write Review Button */}
+                        <button
+                            onClick={() => setShowForm(!showForm)}
+                            className={`w-full md:w-auto px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 shadow-sm border ${showForm
+                                ? "bg-white border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                                : "bg-black border-transparent text-white hover:bg-gray-800 hover:shadow-md"
+                                }`}
+                        >
+                            {showForm ? "Cancel" : "Write a Review"}
+                        </button>
                     </div>
                 </div>
 
@@ -178,8 +191,6 @@ export default function ReviewsSection({ productId, initialReviews }: ReviewsSec
                         />
                     </div>
                 )}
-
-                <hr className="border-gray-100 mb-8" />
 
                 {/* Review list */}
                 {displayedReviews.length > 0 ? (
