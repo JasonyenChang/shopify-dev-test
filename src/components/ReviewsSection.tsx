@@ -1,6 +1,7 @@
+
 "use client";
 
-import { useOptimistic, useTransition, useState } from "react";
+import { useOptimistic, useTransition, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Review } from "@/types/shopify";
 import ReviewForm, { ReviewFormData } from "./ReviewForm";
@@ -26,12 +27,14 @@ function formatDate(dateString: string) {
 }
 
 const REVIEWS_PER_PAGE = 10;
+type SortOption = 'recent' | 'helpful';
 
 export default function ReviewsSection({ productId, initialReviews }: ReviewsSectionProps) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const [showForm, setShowForm] = useState(false);
     const [visibleCount, setVisibleCount] = useState(REVIEWS_PER_PAGE);
+    const [sortBy, setSortBy] = useState<SortOption>('recent');
 
     // For optimistic UI. Insert the latest review into the list and display it to the user immediately.
     const [optimisticReviews, addOptimisticReview] = useOptimistic(
@@ -57,6 +60,7 @@ export default function ReviewsSection({ productId, initialReviews }: ReviewsSec
         startTransition(async () => {
             // Display new review immediately
             addOptimisticReview(optimisticReview);
+            setSortBy('recent');
 
             try {
                 // Add a new review
@@ -97,8 +101,21 @@ export default function ReviewsSection({ productId, initialReviews }: ReviewsSec
         ? (optimisticReviews.reduce((sum, review) => sum + review.rating, 0) / reviewCount).toFixed(1)
         : "0.0";
 
-    const displayedReviews = optimisticReviews.slice(0, visibleCount);
-    const hasMore = visibleCount < optimisticReviews.length;
+    const sortedReviews = useMemo(() => {
+        // 複製一份陣列以免修改到原參考
+        return [...optimisticReviews].sort((a, b) => {
+            if (sortBy === 'recent') {
+                // 日期大到小 (新的在前面)
+                return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+            } else {
+                // Helpful 數大到小
+                return (b.helpfulCount || 0) - (a.helpfulCount || 0);
+            }
+        });
+    }, [optimisticReviews, sortBy]);
+
+    const displayedReviews = sortedReviews.slice(0, visibleCount);
+    const hasMore = visibleCount < sortedReviews.length;
 
     const handleLoadMore = () => {
         setVisibleCount((prev) => prev + REVIEWS_PER_PAGE);
@@ -118,6 +135,21 @@ export default function ReviewsSection({ productId, initialReviews }: ReviewsSec
                             >
                                 {showForm ? "Cancel" : "Write a Review"}
                             </button>
+                        </div>
+
+                        <div className="flex justify-end items-center border-b border-gray-100 pb-4">
+                            <div className="flex items-center gap-2">
+                                <label htmlFor="sort-reviews" className="text-sm text-gray-600">Sort by:</label>
+                                <select
+                                    id="sort-reviews"
+                                    value={sortBy}
+                                    onChange={(e) => setSortBy(e.target.value as SortOption)}
+                                    className="text-sm border-gray-300 border rounded-md py-1.5 px-3 focus:ring-2 focus:ring-black focus:border-transparent outline-none cursor-pointer hover:bg-gray-50"
+                                >
+                                    <option value="recent">Most Recent</option>
+                                    <option value="helpful">Most Helpful</option>
+                                </select>
+                            </div>
                         </div>
 
                         {optimisticReviews.length > 0 && (
@@ -221,3 +253,4 @@ export default function ReviewsSection({ productId, initialReviews }: ReviewsSec
         </div>
     );
 }
+
