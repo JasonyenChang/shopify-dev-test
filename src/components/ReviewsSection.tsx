@@ -156,7 +156,7 @@ export default function ReviewsSection({ productId, initialReviews }: ReviewsSec
                                     id="sort-reviews"
                                     value={sortBy}
                                     onChange={(e) => setSortBy(e.target.value as SortOption)}
-                                    className="bg-white border border-gray-300 text-sm rounded-md py-2 pl-3 pr-10 cursor-pointer focus:outline-none focus:border-black appearance-none"
+                                    className="w-full md:w-40 appearance-none bg-white border border-gray-200 text-gray-700 py-2.5 px-4 pr-10 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer hover:border-gray-300 transition-colors shadow-sm"
                                 >
                                     <option value="recent">Most Recent</option>
                                     <option value="helpful">Most Helpful</option>
@@ -184,7 +184,7 @@ export default function ReviewsSection({ productId, initialReviews }: ReviewsSec
 
                 {/* Review form */}
                 {showForm && (
-                    <div className="mb-8 animate-in fade-in slide-in-from-top-4 duration-300">
+                    <div>
                         <ReviewForm
                             onSubmit={handleReviewSubmit}
                             isSubmitting={isPending}
