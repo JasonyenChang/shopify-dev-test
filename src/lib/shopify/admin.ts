@@ -72,9 +72,11 @@ export async function addProductReview(productId: string, reviewData: CreateRevi
         productId,
         rating: reviewData.rating,
         text: reviewData.text,
+        userId: reviewData.userId,
         userName: reviewData.userName,
         helpfulCount: 0,
         createdAt: new Date().toISOString(),
+        // verified: reviewData.userId !== undefined
     };
 
     const currentReviews = await getProductReviews(productId);

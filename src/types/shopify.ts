@@ -47,5 +47,5 @@ export interface Review {
   userId?: string;
   helpfulCount: number;
   createdAt: string;
-  verified?: boolean;
+  // verified?: boolean;
 }

@@ -35,17 +35,28 @@ export default function ReviewsSection({ productId, initialReviews }: ReviewsSec
     const handleAddReview = () => {
         const tempId = crypto.randomUUID();
 
+        let currentUser = null;
+        if (typeof window !== "undefined") {
+            const userStr = localStorage.getItem("user");
+            if (userStr) {
+                try {
+                    currentUser = JSON.parse(userStr);
+                } catch (e) {
+                    console.error("User data parse error", e);
+                }
+            }
+        }
+
         // Mock optimistic data
         const optimisticReview: Review = {
             id: tempId,
             productId: productId,
             rating: 5,
             text: `Optimistic UI 測試！(立刻出現，背景存檔) - ${new Date().toLocaleTimeString()}`,
-            userName: "Instant User",
-            userId: "temp_user",
+            userName: currentUser ? currentUser.name : "Anonymous",
+            userId: currentUser ? currentUser.id : undefined,
             helpfulCount: 0,
             createdAt: new Date().toISOString(),
-            verified: true,
         };
 
         startTransition(async () => {
@@ -53,7 +64,7 @@ export default function ReviewsSection({ productId, initialReviews }: ReviewsSec
             addOptimisticReview(optimisticReview);
 
             try {
-                // Add the new review
+                // Add a new review
                 const res = await fetch("/api/reviews", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -108,10 +119,8 @@ export default function ReviewsSection({ productId, initialReviews }: ReviewsSec
                                 <div className="flex flex-col gap-1">
                                     <div className="flex items-center gap-2">
                                         <span className="font-bold text-gray-900">{review.userName}</span>
-                                        {!!review.userId && (
-                                            <span className="flex items-center gap-1 text-xs text-green-700 bg-green-50 px-2 py-0.5 rounded-full border border-green-100">
-                                                ✓ Verified Purchase
-                                            </span>
+                                        {review.userId && (
+                                            <span className="flex items-center gap-1 text-xs text-green-700 bg-green-50 px-2 py-0.5 rounded-full border border-green-100">Verified Purchase</span>
                                         )}
                                     </div>
                                     <div className="flex text-yellow-400 text-sm">
