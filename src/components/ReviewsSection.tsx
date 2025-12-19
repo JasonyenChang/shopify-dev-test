@@ -88,7 +88,7 @@ export default function ReviewsSection({ productId, initialReviews }: ReviewsSec
                 });
             } catch (error) {
                 console.error("Submission failed", error);
-                toast.error("Failed to submit. Please try again.", {
+                toast.error("Failed to submit. Please check the internet connection.", {
                     duration: 3000,
                     position: "top-center",
                 });

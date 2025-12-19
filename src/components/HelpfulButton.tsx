@@ -32,7 +32,7 @@ export default function HelpfulButton({
         // Perform background API request
         startTransition(async () => {
             try {
-                await fetch("/api/reviews", {
+                const res = await fetch("/api/reviews", {
                     method: "PATCH",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
@@ -41,6 +41,8 @@ export default function HelpfulButton({
                         action: "helpfulCount",
                     }),
                 });
+
+                if (!res.ok) throw new Error("API Error");
 
                 // Sync with server data to ensure consistency
                 router.refresh();
@@ -51,13 +53,16 @@ export default function HelpfulButton({
                 });
 
             } catch (error) {
-                console.error(error);
+                console.error("Helpful count failed.", error);
 
                 // Rollback UI state to previous value
                 setCount(previousCount);
                 setHasClicked(false);
 
-                toast.error("Something went wrong");
+                toast.error("Failed to submit. Please check the internet connection.", {
+                    duration: 3000,
+                    position: "top-center",
+                });
             }
         });
     };
