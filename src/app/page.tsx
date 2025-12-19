@@ -9,29 +9,20 @@ export default function Home() {
           This is a starter codebase for the Shopify Product Review assignment.
         </p>
 
-        <div className="bg-white rounded-lg shadow-md p-6 text-left">
-          <h2 className="text-2xl font-semibold mb-4">Getting Started</h2>
-          <ol className="list-decimal list-inside space-y-2 text-gray-700">
-            <li>
-              Set up your{" "}
-              <code className="bg-gray-100 px-2 py-1 rounded">.env.local</code>{" "}
-              file
-            </li>
-            <li>
-              Replace the product handle below with a real product from your
-              store
-            </li>
-            <li>Start building the review feature!</li>
-          </ol>
+        <div className="flex flex-col gap-2">
+          <Link
+            href="/products/stainless-steel-water-bottle"
+            className="inline-block bg-white text-blue border border-blue px-6 py-3 rounded-lg hover:bg-blue-200 transition"
+          >
+            Stainless Steel Water Bottle
+          </Link>
 
-          <div className="mt-6">
-            <Link
-              href="/products/example-product"
-              className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
-            >
-              View Example Product Page
-            </Link>
-          </div>
+          <Link
+            href="/products/organic-cotton-t-shirt"
+            className="inline-block bg-white text-blue border border-blue px-6 py-3 rounded-lg hover:bg-blue-200 transition"
+          >
+            Organic Cotton T-Shirt
+          </Link>
         </div>
 
         <div className="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
