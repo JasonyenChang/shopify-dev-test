@@ -126,7 +126,7 @@ export async function incrementHelpfulCount(productId: string, reviewId: string)
   await shopifyAdminFetch(writeMutation, variables);
 }
 
-export async function addProductReview(productId: string, reviewData: Review): Promise<Review> {
+export async function addProductReview(productId: string, reviewData: Review): Promise<void> {
   const currentReviews = await getProductReviews(productId);
 
   // Merge reviews
@@ -168,6 +168,4 @@ export async function addProductReview(productId: string, reviewData: Review): P
   };
 
   await shopifyAdminFetch(writeMutation, variables);
-
-  return reviewData;
 }
