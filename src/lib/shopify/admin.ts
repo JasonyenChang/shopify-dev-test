@@ -87,7 +87,7 @@ export async function incrementHelpfulCount(productId: string, reviewId: string)
 
   const jsonString = JSON.stringify(updatedReviews);
 
-  // 3. Write: Updated GraphQL structure to match the homework example
+  // Updated GraphQL structure to match the homework example
   const writeMutation = `
     mutation SetProductReview($productId: ID!, $reviewsJson: String!) {
       metafieldsSet(
@@ -117,7 +117,7 @@ export async function incrementHelpfulCount(productId: string, reviewId: string)
     }
   `;
 
-  // 4. Variables: Now passing distinct arguments instead of a metafields object
+  // passing distinct arguments instead of a metafields object
   const variables = {
     productId: productId,
     reviewsJson: jsonString,
