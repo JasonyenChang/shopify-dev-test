@@ -11,9 +11,9 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: "Missing fields" }, { status: 400 });
         }
 
-        const newReview = await addProductReview(productId, review);
+        await addProductReview(productId, review);
 
-        return NextResponse.json({ success: true, review: newReview });
+        return NextResponse.json({ success: true });
     } catch (error) {
         console.error("API Error:", error);
         return NextResponse.json(
