@@ -45,11 +45,12 @@ describe('ReviewForm Component', () => {
         expect(screen.queryByPlaceholderText('Your Name')).not.toBeInTheDocument();
     });
 
-    it('shows validation errors when submitting empty form', () => {
+    it('shows validation errors when submitting empty form', async () => {
+        const user = userEvent.setup();
         render(<ReviewForm onSubmit={mockSubmit} isSubmitting={false} />);
 
         const submitBtn = screen.getByRole('button', { name: /submit review/i });
-        fireEvent.click(submitBtn);
+        await user.click(submitBtn);
 
         expect(screen.getByText('Name is required')).toBeInTheDocument();
         expect(screen.getByText('Please select a star rating')).toBeInTheDocument();
